@@ -41,7 +41,11 @@ def create_app(config_name=None):
 
     # CORS
     cors_origins = getattr(app_config, "CORS_ORIGINS", ["http://localhost:3000"])
-    CORS(app, resources={r"/api/*": {"origins": cors_origins}})
+    CORS(app, resources={r"/api/*": {
+        "origins": cors_origins,
+        "allow_headers": ["Content-Type", "Authorization"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    }})
 
     # ------------------------------------------------------------------
     # Initialise services and attach to the app instance
