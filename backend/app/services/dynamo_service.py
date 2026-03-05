@@ -123,6 +123,42 @@ class DynamoService:
             logger.error("Failed to get user %s: %s", user_id, exc)
             raise
 
+    def update_user(self, user_id, updates):
+        """Update specific attributes of a user.
+
+        Args:
+            user_id: The user primary key.
+            updates: Dict of attribute_name -> new_value.
+
+        Returns:
+            The full updated item attributes.
+        """
+        try:
+            table = self.resource.Table("Users")
+            updates["updated_at"] = datetime.now(timezone.utc).isoformat()
+            expression_parts = []
+            attr_names = {}
+            attr_values = {}
+            for idx, (key, value) in enumerate(updates.items()):
+                placeholder_name = f"#attr{idx}"
+                placeholder_value = f":val{idx}"
+                expression_parts.append(f"{placeholder_name} = {placeholder_value}")
+                attr_names[placeholder_name] = key
+                attr_values[placeholder_value] = value
+            update_expr = "SET " + ", ".join(expression_parts)
+            response = table.update_item(
+                Key={"user_id": user_id},
+                UpdateExpression=update_expr,
+                ExpressionAttributeNames=attr_names,
+                ExpressionAttributeValues=attr_values,
+                ReturnValues="ALL_NEW",
+            )
+            logger.info("Updated user %s.", user_id)
+            return response.get("Attributes")
+        except ClientError as exc:
+            logger.error("Failed to update user %s: %s", user_id, exc)
+            raise
+
     def get_user_by_email(self, email):
         """Look up a user via the ``email-index`` GSI.
 

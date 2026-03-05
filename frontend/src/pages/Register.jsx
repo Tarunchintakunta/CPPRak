@@ -21,8 +21,12 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      await register(name, email, password);
-      navigate('/events');
+      const { requires_verification } = await register(name, email, password);
+      if (requires_verification) {
+        navigate('/verify-email', { state: { email } });
+      } else {
+        navigate('/events');
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed');
     } finally {

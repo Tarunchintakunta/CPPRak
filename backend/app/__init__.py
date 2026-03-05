@@ -15,6 +15,7 @@ from app.services.dynamo_service import DynamoService
 from app.services.s3_service import S3Service
 from app.services.lambda_service import LambdaService
 from app.services.auth_service import AuthService
+from app.services.cognito_service import CognitoService
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +58,7 @@ def create_app(config_name=None):
         secret_key=app_config.SECRET_KEY,
         expiration_hours=getattr(app_config, "JWT_EXPIRATION_HOURS", 24),
     )
+    app.cognito_service = CognitoService(app_config)
 
     # ------------------------------------------------------------------
     # Register blueprints

@@ -101,13 +101,20 @@ def list_registrations():
         user_id = g.current_user["user_id"]
         registrations = current_app.dynamo_service.get_user_registrations(user_id)
 
-        # Enrich with event details
+        # Enrich with event and ticket details
         for reg in registrations:
             event = current_app.dynamo_service.get_event(reg.get("event_id", ""))
             if event:
                 reg["event_name"] = event.get("name", "")
                 reg["event_date"] = event.get("date", "")
                 reg["event_location"] = event.get("location", "")
+
+            ticket = current_app.dynamo_service.get_ticket_by_registration(reg.get("registration_id", ""))
+            if ticket:
+                reg["ticket"] = {
+                    "ticket_id": ticket.get("ticket_id"),
+                    "status": ticket.get("status"),
+                }
 
         return jsonify({"registrations": registrations}), 200
 

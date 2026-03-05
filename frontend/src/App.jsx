@@ -11,6 +11,7 @@ import TicketDetail from './pages/TicketDetail'
 import AdminDashboard from './pages/AdminDashboard'
 import CreateEvent from './pages/CreateEvent'
 import ScanTicket from './pages/ScanTicket'
+import VerifyEmail from './pages/VerifyEmail'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route path="/events" element={<Events />} />
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/my-tickets" element={

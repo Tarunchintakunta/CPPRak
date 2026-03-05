@@ -32,20 +32,32 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const res = await authAPI.login({ email, password });
-    const { token, user: u } = res.data;
+    const { token, user: u, requires_verification } = res.data;
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(u));
     setUser(u);
-    return u;
+    return { user: u, requires_verification };
   };
 
   const register = async (name, email, password) => {
     const res = await authAPI.register({ name, email, password });
-    const { token, user: u } = res.data;
+    const { token, user: u, requires_verification } = res.data;
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(u));
     setUser(u);
-    return u;
+    return { user: u, requires_verification };
+  };
+
+  const refreshUser = async () => {
+    try {
+      const res = await authAPI.me();
+      const u = res.data.user;
+      setUser(u);
+      localStorage.setItem('user', JSON.stringify(u));
+      return u;
+    } catch {
+      return null;
+    }
   };
 
   const logout = () => {
@@ -57,7 +69,7 @@ export function AuthProvider({ children }) {
   const isAdmin = user?.role === 'admin';
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, isAdmin }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, isAdmin, refreshUser }}>
       {children}
     </AuthContext.Provider>
   );

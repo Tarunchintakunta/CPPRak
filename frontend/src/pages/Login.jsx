@@ -16,8 +16,12 @@ export default function Login() {
     setError('');
     setLoading(true);
     try {
-      await login(email, password);
-      navigate('/events');
+      const { requires_verification } = await login(email, password);
+      if (requires_verification) {
+        navigate('/verify-email', { state: { email } });
+      } else {
+        navigate('/events');
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed');
     } finally {
