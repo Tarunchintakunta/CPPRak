@@ -14,7 +14,7 @@ import ScanTicket from './pages/ScanTicket'
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col bg-bg">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#faf9f7' }}>
       <Navbar />
       <main className="flex-1 flex flex-col">
         <Routes>
@@ -40,8 +40,8 @@ function App() {
           } />
         </Routes>
       </main>
-      <footer className="border-t border-surface-lighter py-6 text-center text-text-muted text-sm">
-        Rakshan &copy; 2026 &mdash; Secure QR Ticket Management
+      <footer className="border-t border-border-light py-8 text-center text-text-muted text-sm">
+        <span className="font-medium text-text">Rakshan</span> &middot; Secure QR Ticketing &middot; 2026
       </footer>
     </div>
   )

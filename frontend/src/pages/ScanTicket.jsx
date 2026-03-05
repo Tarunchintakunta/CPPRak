@@ -33,47 +33,47 @@ export default function ScanTicket() {
   const isUsed = result?.error_code === 'TICKET_ALREADY_USED';
 
   return (
-    <div className="max-w-lg mx-auto px-4 sm:px-6 py-10">
-      <h1 className="text-3xl font-bold mb-2">Validate Ticket</h1>
-      <p className="text-text-muted mb-8">Paste the scanned QR code data to validate a ticket.</p>
+    <div className="max-w-md mx-auto px-4 sm:px-6 py-10">
+      <h1 className="text-2xl font-bold mb-1">Validate Ticket</h1>
+      <p className="text-text-muted text-sm mb-6">Paste scanned QR code data below.</p>
 
-      <form onSubmit={handleValidate} className="bg-surface rounded-2xl border border-surface-lighter p-6 mb-6">
-        <label className="block text-sm font-medium text-text-muted mb-2">QR Code Data</label>
+      <form onSubmit={handleValidate} className="bg-white rounded-lg border border-border-light p-5 mb-4">
+        <label className="block text-sm font-medium text-text mb-1.5">QR Code Data</label>
         <textarea
           value={qrData} onChange={(e) => setQrData(e.target.value)}
           rows={4}
-          className="w-full bg-surface-light border border-surface-lighter rounded-lg py-3 px-4 text-text placeholder-text-muted/50 focus:outline-none focus:border-primary font-mono text-sm resize-none"
-          placeholder="Paste QR code data here..."
+          className="w-full bg-white border border-border rounded-md py-2.5 px-3 text-text text-sm placeholder-text-muted/60 focus:outline-none focus:border-primary font-mono resize-none"
+          placeholder='{"ticket_id": "...", ...}'
         />
         <button
           type="submit" disabled={loading || !qrData.trim()}
-          className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark disabled:opacity-50 text-white font-semibold py-3 rounded-xl transition-colors cursor-pointer border-none text-base"
+          className="mt-3 w-full inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark disabled:opacity-50 text-white font-medium py-2.5 rounded-md transition-colors cursor-pointer border-none text-sm"
         >
-          <ScanLine className="w-5 h-5" />
-          {loading ? 'Validating...' : 'Validate Ticket'}
+          <ScanLine className="w-4 h-4" />
+          {loading ? 'Validating...' : 'Validate'}
         </button>
       </form>
 
       {result && (
-        <div className={`rounded-2xl border p-6 ${isValid ? 'bg-success/5 border-success/30' : isUsed ? 'bg-accent/5 border-accent/30' : 'bg-danger/5 border-danger/30'}`}>
-          <div className="flex items-center gap-3 mb-4">
+        <div className={`rounded-lg border p-4 ${isValid ? 'bg-emerald-50 border-emerald-200' : isUsed ? 'bg-amber-50 border-amber-200' : 'bg-red-50 border-red-200'}`}>
+          <div className="flex items-center gap-2.5 mb-2">
             {isValid ? (
-              <CheckCircle className="w-8 h-8 text-success" />
+              <CheckCircle className="w-5 h-5 text-success" />
             ) : isUsed ? (
-              <AlertCircle className="w-8 h-8 text-accent" />
+              <AlertCircle className="w-5 h-5 text-amber-600" />
             ) : (
-              <XCircle className="w-8 h-8 text-danger" />
+              <XCircle className="w-5 h-5 text-danger" />
             )}
             <div>
-              <h3 className={`text-lg font-semibold ${isValid ? 'text-success' : isUsed ? 'text-accent' : 'text-danger'}`}>
-                {isValid ? 'Ticket Valid' : result.error_code || 'Invalid Ticket'}
+              <h3 className={`text-sm font-semibold ${isValid ? 'text-success' : isUsed ? 'text-amber-700' : 'text-danger'}`}>
+                {isValid ? 'Valid - Allow Entry' : result.error_code || 'Invalid'}
               </h3>
-              <p className="text-sm text-text-muted">{result.message || ''}</p>
+              <p className="text-xs text-text-muted">{result.message || ''}</p>
             </div>
           </div>
           {result.ticket && (
-            <div className="space-y-2 text-sm border-t border-surface-lighter pt-4 mt-2">
-              <div className="flex justify-between"><span className="text-text-muted">Ticket ID</span><span className="font-mono text-xs">{result.ticket.ticket_id?.slice(0, 16)}...</span></div>
+            <div className="space-y-1.5 text-xs border-t border-black/5 pt-3 mt-2">
+              <div className="flex justify-between"><span className="text-text-muted">Ticket</span><span className="font-mono">{result.ticket.ticket_id?.slice(0, 16)}...</span></div>
               {result.ticket.event_name && <div className="flex justify-between"><span className="text-text-muted">Event</span><span>{result.ticket.event_name}</span></div>}
               <div className="flex justify-between"><span className="text-text-muted">Status</span><span className="font-medium">{result.ticket.status}</span></div>
             </div>
@@ -82,7 +82,7 @@ export default function ScanTicket() {
       )}
 
       {error && (
-        <div className="flex items-center gap-2 bg-danger/10 text-danger px-4 py-3 rounded-lg text-sm">
+        <div className="flex items-center gap-2 bg-red-50 text-danger px-3 py-2.5 rounded-md text-sm border border-red-100">
           <AlertCircle className="w-4 h-4 shrink-0" /> {error}
         </div>
       )}

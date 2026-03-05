@@ -1,62 +1,55 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Shield, QrCode, Calendar, CheckCircle, ArrowRight } from 'lucide-react';
+import { QrCode, Calendar, CheckCircle, ArrowRight } from 'lucide-react';
 
 export default function Home() {
   const { user } = useAuth();
 
   return (
     <div className="flex-1">
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 relative">
-          <div className="text-center max-w-3xl mx-auto">
-            <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 bg-primary/20 rounded-3xl flex items-center justify-center">
-                <Shield className="w-10 h-10 text-primary" />
-              </div>
-            </div>
-            <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight">
-              Secure Event
-              <span className="text-primary"> Ticketing</span>
-              <br />with QR Codes
-            </h1>
-            <p className="text-xl text-text-muted mb-10 leading-relaxed">
-              Rakshan provides tamper-proof, cryptographically signed QR tickets for your events.
-              Register, get your QR code, and check in seamlessly.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/events" className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-4 rounded-xl text-lg no-underline transition-colors">
-                Browse Events <ArrowRight className="w-5 h-5" />
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-24 sm:pb-28">
+        <div className="max-w-2xl">
+          <p className="text-accent font-semibold text-sm tracking-wide uppercase mb-4">Secure Event Ticketing</p>
+          <h1 className="text-4xl sm:text-5xl font-bold text-text leading-[1.1] mb-5 tracking-tight">
+            QR tickets that<br />can't be forged.
+          </h1>
+          <p className="text-lg text-text-mid leading-relaxed mb-8 max-w-lg">
+            Rakshan uses cryptographic signing to make every ticket tamper-proof. Register for events, get your QR code, scan at the door.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/events" className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-medium px-5 py-2.5 rounded-md text-sm no-underline transition-colors">
+              Browse events <ArrowRight className="w-4 h-4" />
+            </Link>
+            {!user && (
+              <Link to="/register" className="inline-flex items-center gap-2 bg-white hover:bg-surface-alt text-text font-medium px-5 py-2.5 rounded-md text-sm no-underline border border-border transition-colors">
+                Create account
               </Link>
-              {!user && (
-                <Link to="/register" className="inline-flex items-center justify-center gap-2 bg-surface-light hover:bg-surface-lighter text-text font-semibold px-8 py-4 rounded-xl text-lg no-underline border border-surface-lighter transition-colors">
-                  Create Account
-                </Link>
-              )}
-            </div>
+            )}
           </div>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <h2 className="text-3xl font-bold text-center mb-12">How it works</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            { icon: Calendar, title: 'Browse & Register', desc: 'Find upcoming events and register with a single click.' },
-            { icon: QrCode, title: 'Get QR Ticket', desc: 'Receive a cryptographically signed QR code ticket instantly.' },
-            { icon: CheckCircle, title: 'Scan & Check In', desc: 'Show your QR code at the venue for instant, secure check-in.' },
-          ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="bg-surface rounded-2xl p-8 border border-surface-lighter text-center hover:border-primary/40 transition-colors">
-              <div className="w-14 h-14 bg-primary/15 rounded-xl flex items-center justify-center mx-auto mb-5">
-                <Icon className="w-7 h-7 text-primary" />
+      <section className="border-t border-border-light">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <p className="text-xs font-semibold text-text-muted uppercase tracking-widest mb-8">How it works</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              { icon: Calendar, num: '01', title: 'Find & register', desc: 'Browse upcoming events and register with one click. No paperwork, no waiting.' },
+              { icon: QrCode, num: '02', title: 'Get your QR ticket', desc: 'Receive a cryptographically signed QR code. Each ticket is unique and verifiable.' },
+              { icon: CheckCircle, num: '03', title: 'Scan & enter', desc: 'Show your code at the venue. Instant validation, no duplicates, no fakes.' },
+            ].map(({ icon: Icon, num, title, desc }) => (
+              <div key={num} className="group">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-xs font-mono text-text-muted">{num}</span>
+                  <div className="w-9 h-9 rounded-md bg-surface-alt border border-border-light flex items-center justify-center group-hover:border-accent/40 transition-colors">
+                    <Icon className="w-4.5 h-4.5 text-text-mid" />
+                  </div>
+                </div>
+                <h3 className="text-base font-semibold text-text mb-1.5">{title}</h3>
+                <p className="text-sm text-text-muted leading-relaxed">{desc}</p>
               </div>
-              <h3 className="text-xl font-semibold mb-3">{title}</h3>
-              <p className="text-text-muted leading-relaxed">{desc}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
     </div>

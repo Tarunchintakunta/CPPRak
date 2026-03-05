@@ -40,79 +40,59 @@ export default function EventDetail() {
   if (loading) return <LoadingSpinner text="Loading event..." />;
   if (!event) return (
     <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-      <p className="text-text-muted text-lg">{error || 'Event not found'}</p>
+      <p className="text-text-muted">{error || 'Event not found'}</p>
     </div>
   );
 
+  const details = [
+    { icon: Calendar, label: 'Date', value: event.date },
+    { icon: Clock, label: 'Time', value: event.time },
+    { icon: MapPin, label: 'Location', value: event.location },
+    { icon: Users, label: 'Capacity', value: `${event.capacity} attendees` },
+  ];
+
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <button onClick={() => navigate('/events')} className="flex items-center gap-1.5 text-text-muted hover:text-text text-sm mb-6 bg-transparent border-none cursor-pointer font-medium">
-        <ArrowLeft className="w-4 h-4" /> Back to events
+        <ArrowLeft className="w-4 h-4" /> Events
       </button>
 
-      <div className="bg-surface rounded-2xl border border-surface-lighter p-8">
-        <div className="flex items-center gap-2 text-primary text-sm font-medium mb-4">
-          <span className="px-3 py-1 bg-primary/15 rounded-full">
-            {event.status === 'active' ? 'Active' : event.status}
-          </span>
-        </div>
-
-        <h1 className="text-3xl font-bold mb-4">{event.name}</h1>
-
-        {event.description && (
-          <p className="text-text-muted leading-relaxed mb-6">{event.description}</p>
+      <div className="bg-white rounded-lg border border-border-light p-6 sm:p-8">
+        {event.status === 'active' && (
+          <span className="inline-block text-xs font-medium text-success bg-emerald-50 border border-emerald-100 px-2 py-0.5 rounded mb-4">Active</span>
         )}
 
-        <div className="grid sm:grid-cols-2 gap-4 mb-8">
-          <div className="flex items-center gap-3 text-text-muted">
-            <div className="w-10 h-10 bg-surface-light rounded-lg flex items-center justify-center">
-              <Calendar className="w-5 h-5 text-primary" />
+        <h1 className="text-2xl font-bold text-text mb-2">{event.name}</h1>
+
+        {event.description && (
+          <p className="text-text-mid text-sm leading-relaxed mb-6">{event.description}</p>
+        )}
+
+        <div className="grid sm:grid-cols-2 gap-3 mb-6">
+          {details.map(({ icon: Icon, label, value }) => (
+            <div key={label} className="flex items-center gap-3 py-2">
+              <div className="w-8 h-8 rounded-md bg-surface-alt flex items-center justify-center shrink-0">
+                <Icon className="w-4 h-4 text-text-mid" />
+              </div>
+              <div>
+                <p className="text-[11px] text-text-muted uppercase tracking-wide">{label}</p>
+                <p className="text-sm text-text font-medium">{value}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs text-text-muted/70">Date</p>
-              <p className="text-text font-medium">{event.date}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-text-muted">
-            <div className="w-10 h-10 bg-surface-light rounded-lg flex items-center justify-center">
-              <Clock className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="text-xs text-text-muted/70">Time</p>
-              <p className="text-text font-medium">{event.time}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-text-muted">
-            <div className="w-10 h-10 bg-surface-light rounded-lg flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="text-xs text-text-muted/70">Location</p>
-              <p className="text-text font-medium">{event.location}</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 text-text-muted">
-            <div className="w-10 h-10 bg-surface-light rounded-lg flex items-center justify-center">
-              <Users className="w-5 h-5 text-primary" />
-            </div>
-            <div>
-              <p className="text-xs text-text-muted/70">Capacity</p>
-              <p className="text-text font-medium">{event.capacity} attendees</p>
-            </div>
-          </div>
+          ))}
         </div>
 
         {message && (
-          <div className="flex items-center gap-2 bg-success/10 text-success px-4 py-3 rounded-lg mb-4 text-sm">
+          <div className="flex items-center gap-2 bg-emerald-50 text-success px-3 py-2.5 rounded-md mb-4 text-sm border border-emerald-100">
             <CheckCircle className="w-4 h-4 shrink-0" /> {message}
             <button onClick={() => navigate('/my-tickets')} className="ml-auto text-success underline bg-transparent border-none cursor-pointer text-sm">
-              View my tickets
+              View tickets
             </button>
           </div>
         )}
 
         {error && (
-          <div className="flex items-center gap-2 bg-danger/10 text-danger px-4 py-3 rounded-lg mb-4 text-sm">
+          <div className="flex items-center gap-2 bg-red-50 text-danger px-3 py-2.5 rounded-md mb-4 text-sm border border-red-100">
             <AlertCircle className="w-4 h-4 shrink-0" /> {error}
           </div>
         )}
@@ -120,7 +100,7 @@ export default function EventDetail() {
         {event.status === 'active' && !message && (
           <button
             onClick={handleRegister} disabled={registering}
-            className="w-full bg-primary hover:bg-primary-dark disabled:opacity-50 text-white font-semibold py-3.5 rounded-xl transition-colors cursor-pointer border-none text-base"
+            className="w-full bg-primary hover:bg-primary-dark disabled:opacity-50 text-white font-medium py-2.5 rounded-md transition-colors cursor-pointer border-none text-sm"
           >
             {registering ? 'Registering...' : user ? 'Register for this event' : 'Sign in to register'}
           </button>
