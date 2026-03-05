@@ -7,4 +7,4 @@ qrcode
 pillow
 pytest
 requests
-qr_ticket_manager
+gunicorn
