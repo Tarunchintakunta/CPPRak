@@ -1,0 +1,10 @@
+flask
+flask-cors
+boto3
+pyjwt
+bcrypt
+qrcode
+pillow
+pytest
+requests
+qr_ticket_manager
